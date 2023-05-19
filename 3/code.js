@@ -1,3 +1,5 @@
+//first working version   #1
+
 console.log("ok1");
 
 let xRect, yRect, xSize, ySize, move, velocity, speed;
@@ -7,7 +9,6 @@ let arrowsBlocker = true;
 
 velocity = 5;
 speed = 10;
-
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
