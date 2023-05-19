@@ -1,11 +1,13 @@
 console.log("ok1");
 
-let xRect, yRect, xSize, ySize, move, velocity;
+let xRect, yRect, xSize, ySize, move, velocity, speed;
 
 let stopMove = true;
 let arrowsBlocker = true;
 
-velocity = 10;
+velocity = 5;
+speed = 10;
+
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -27,8 +29,10 @@ function innit(){
 }
 
 
+
 function render(){
     context.fillRect(xRect, yRect, xSize, ySize);
+    
 }
 setInterval(render,1)
 
@@ -39,11 +43,11 @@ function keyDown(e){
             arrowsBlocker=false
             stopMove = !stopMove;
             move = setInterval(()=>{
-                keepOnMap();
-                yRect-=5
+                
+                yRect-=speed
                 context.fillStyle = "green";
                 context.clearRect(xRect, yRect+150, xSize, ySize)
-                
+                keepOnMap();
             }, velocity)
             
         };
@@ -51,11 +55,11 @@ function keyDown(e){
             arrowsBlocker=false
             stopMove = !stopMove;
             move = setInterval(()=>{
-                keepOnMap();
-                yRect+=5
+                
+                yRect+=speed
                 context.fillStyle = "green";
                 context.clearRect(xRect, yRect-150, xSize, ySize)
-                
+                keepOnMap();
             }, velocity)
             
             
@@ -64,11 +68,11 @@ function keyDown(e){
             arrowsBlocker=false
             stopMove = !stopMove;
             move = setInterval(()=>{
-                keepOnMap();
-                xRect-=5
+                
+                xRect-=speed
                 context.fillStyle = "green";
                 context.clearRect(xRect+150, yRect, xSize, ySize)
-                
+                keepOnMap();
             }, velocity)
             
             
@@ -77,11 +81,11 @@ function keyDown(e){
             arrowsBlocker=false
             stopMove = !stopMove;
             move = setInterval(()=>{
-                keepOnMap();
-                xRect+=5
+                
+                xRect+=speed
                 context.fillStyle = "green";
                 context.clearRect(xRect-150, yRect, xSize, ySize)
-                
+                keepOnMap();
             }, velocity)
             
             
@@ -96,6 +100,7 @@ function keyUp(e){//
         // context.fillRect(xRect, yRect, xSize, ySize);
         stopMove = !stopMove;
         clearInterval(move);
+        console.log("xRect = " + xRect+",", "yRect = " + yRect);
 
     };
     if (e.keyCode == '40'){//Down
@@ -104,6 +109,7 @@ function keyUp(e){//
         // context.fillRect(xRect, yRect, xSize, ySize);
         stopMove = !stopMove;
         clearInterval(move);
+        console.log("xRect = " + xRect+",", "yRect = " + yRect);
         
     };
     if (e.keyCode == '37'){//Left
@@ -112,6 +118,7 @@ function keyUp(e){//
         // context.fillRect(xRect, yRect, xSize, ySize);
         stopMove = !stopMove;
         clearInterval(move);
+        console.log("xRect = " + xRect+",", "yRect = " + yRect);
         
     };
     if (e.keyCode == '39'){//Right
@@ -120,14 +127,29 @@ function keyUp(e){//
         // context.fillRect(xRect, yRect, xSize, ySize);
         stopMove = !stopMove;
         clearInterval(move);
+        console.log("xRect = " + xRect+",", "yRect = " + yRect);
         
     };
 };
 
 
-let keepOnMapX = window.innerWidth - 16 - 2-160;
+let keepOnMapX = window.innerWidth - 16 - 2 - 150 ;
+let keepOnMapY = window.innerHeight - 16 - 2 - 150;
 function keepOnMap(){
     if(xRect>keepOnMapX){
+        xRect-=speed
+        clearInterval(move);
+    }
+    if(xRect<0){
+        xRect+=speed
+        clearInterval(move);
+    }
+    if(yRect>keepOnMapY){
+        yRect-=speed
+        clearInterval(move);
+    }
+    if(yRect<0){
+        yRect+=speed
         clearInterval(move);
     }
 }
