@@ -171,6 +171,7 @@ const ctx = canvas.getContext('2d');
 var speedX=+5;
 var speedY=-5;
 var ballRadius = 100;
+var color1 = '#' + Math.floor(Math.random() * 16777215).toString(16)
 
 var x = window.innerWidth/7;
 var y = window.innerHeight/1.3;
@@ -178,12 +179,10 @@ var y = window.innerHeight/1.3;
 var speedX2=+7;
 var speedY2=-7;
 var ballRadius2 = 80;
+var color2 = '#' + Math.floor(Math.random() * 16777215).toString(16)
 
 var x2 = window.innerWidth/7;
 var y2 = window.innerHeight/7;
-
-
-
 
 ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
@@ -193,13 +192,14 @@ function draw(){
     drawBall();
     drawBall2();
     collisionCheck();
+    console.log("x1 = "+Math.floor(x)+", y1= "+Math.floor(y)+" | x2 = "+Math.floor(x2)+", y2 = "+Math.floor(y2))
 };
-setInterval(draw, 10)
+setInterval(draw, 10);
 
 function drawBall(){
     ctx.beginPath();
     ctx.arc(x,y,ballRadius,0,Math.PI*2,true);
-    ctx.fillStyle = "red";
+    ctx.fillStyle = color1;
     ctx.fill();
     ctx.closePath(); 
     x+=speedX;
@@ -209,26 +209,30 @@ function drawBall(){
 function drawBall2(){
     ctx.beginPath();
     ctx.arc(x2,y2,ballRadius2,0,Math.PI*2,true);
-    ctx.fillStyle = "aqua";
+    ctx.fillStyle = color2;
     ctx.fill();
     ctx.closePath();
     x2+=speedX2;
     y2+=speedY2;
 };
 
-
 function collisionCheck(){
     if(y+speedY<0+ballRadius||y+speedY>window.innerHeight-ballRadius){
-        speedY=-speedY
+        speedY=-speedY;
+        color1 = '#' + Math.floor(Math.random() * 16777215).toString(16)
+        
     };
     if(x+speedX<0+ballRadius||x+speedX>window.innerWidth-ballRadius){
-        speedX=-speedX
+        speedX=-speedX;
+        color1 = '#' + Math.floor(Math.random() * 16777215).toString(16)
     }
     if(y2+speedY2<0+ballRadius2||y2+speedY2>window.innerHeight-ballRadius2){
-        speedY2=-speedY2
+        speedY2=-speedY2;
+        color2 = '#' + Math.floor(Math.random() * 16777215).toString(16)
     };
     if(x2+speedX2<0+ballRadius2||x2+speedX2>window.innerWidth-ballRadius2){
-        speedX2=-speedX2
+        speedX2=-speedX2;
+        color2 = '#' + Math.floor(Math.random() * 16777215).toString(16)
     }
     // if(a==a){   
     //     speedY2=-speedY2;
