@@ -168,6 +168,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 //#1
+
 var speedX=+5;
 var speedY=-5;
 var ballRadius = 100;
@@ -176,6 +177,7 @@ var color1 = '#' + Math.floor(Math.random() * 16777215).toString(16)
 var x = window.innerWidth/7;
 var y = window.innerHeight/1.3;
 //#2
+
 var speedX2=+7;
 var speedY2=-7;
 var ballRadius2 = 80;
@@ -184,13 +186,25 @@ var color2 = '#' + Math.floor(Math.random() * 16777215).toString(16)
 var x2 = window.innerWidth/7;
 var y2 = window.innerHeight/7;
 
+//#3
+
+var speedX3=+2;
+var speedY3=-2;
+var ballRadius3 = 180;
+var color3 = '#' + Math.floor(Math.random() * 16777215).toString(16)
+
+var x3 = window.innerWidth/2;
+var y3 = window.innerHeight/5;
+
 ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
 function draw(){
     ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+    drawBall3();
     drawBall();
     drawBall2();
+   
     collisionCheck();
     console.log("x1 = "+Math.floor(x)+", y1= "+Math.floor(y)+" | x2 = "+Math.floor(x2)+", y2 = "+Math.floor(y2))
 };
@@ -216,29 +230,58 @@ function drawBall2(){
     y2+=speedY2;
 };
 
+function drawBall3(){
+    ctx.beginPath();
+    ctx.arc(x3,y3,ballRadius3,0,Math.PI*2,true);
+    ctx.fillStyle = color3;
+    ctx.fill();
+    ctx.closePath(); 
+    x3+=speedX3;
+    y3+=speedY3;
+};
+
 function collisionCheck(){
     if(y+speedY<0+ballRadius||y+speedY>window.innerHeight-ballRadius){
         speedY=-speedY;
-        color1 = '#' + Math.floor(Math.random() * 16777215).toString(16)
+        color1 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        
         
     };
     if(x+speedX<0+ballRadius||x+speedX>window.innerWidth-ballRadius){
         speedX=-speedX;
-        color1 = '#' + Math.floor(Math.random() * 16777215).toString(16)
+        color1 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+       
     }
     if(y2+speedY2<0+ballRadius2||y2+speedY2>window.innerHeight-ballRadius2){
         speedY2=-speedY2;
-        color2 = '#' + Math.floor(Math.random() * 16777215).toString(16)
+        color2 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        
     };
     if(x2+speedX2<0+ballRadius2||x2+speedX2>window.innerWidth-ballRadius2){
         speedX2=-speedX2;
-        color2 = '#' + Math.floor(Math.random() * 16777215).toString(16)
+        color2 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+       
     }
+    if(y3+speedY3<0+ballRadius3||y3+speedY3>window.innerHeight-ballRadius3){
+        speedY3=-speedY3;
+        color3 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        
+    };
+    if(x3+speedX3<0+ballRadius3||x3+speedX3>window.innerWidth-ballRadius3){
+        speedX3=-speedX3;
+        color3 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        
+    }
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
     // if(a==a){   
     //     speedY2=-speedY2;
     //     speedX=-speedX;
     // }collisions with objects not walls
-}
+// }
 
 
 
@@ -260,4 +303,4 @@ function collisionCheck(){
 //     test1()
 // }
 
-// test();
+// test()
