@@ -1,43 +1,16 @@
 console.log("hello");
-
 const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
+const context = canvas.getContext("2d");
+context.canvas.width = window.innerWidth;
+context.canvas.height = window.innerHeight;
 
-ctx.canvas.width = window.innerWidth;
-ctx.canvas.height = window.innerHeight;
+const balls = [];
+let count, x, y, radius, color, speedX, speedY;
 
-const config = {
-    ball:{
-        count: {
-            min: 10,
-            max: 20,
-        },
-
-        speed: {
-            min: 10,
-            max: 20,
-        },
-
-        radius: {
-            min: 10,
-            max: 15,
-        },
-
-        startCoordinates: {
-            x: window.innerWidth/10,
-            y: window.innerHeight/2,
-        }
-
-    }
+//chatgpt
+const getRandomInt = (min,max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min
 }
-
-
-const getRandomInt = (min, max)=>{
-    //CHAT GPT
-return Math.floor(Math.random() * (max - min + 1)) + min
-    //CHAT GPT
-};
-
 const getRandomColor = () => {
     //CHAT GPT
     const letters = '0123456789ABCDEF';
@@ -48,36 +21,51 @@ const getRandomColor = () => {
       color += letters[Math.floor(Math.random() * 16)];
     }
   } while (color === '#FFFFFF'); // Exclude white color
+  return color
+}
+//chatgpt
 
-  return color;
-    //CHAT GPT
+const drawBall = (x,y,radius,color) => {
+    context.beginPath();
+    context.arc(x,y,radius,0,2*Math.PI);
+    context.fillStyle = color;
+    context.fill();
+    context.closePath();
 }
 
-const count = getRandomInt(config.ball.count.min, config.ball.count.max);
-const color = getRandomColor();
+const createBalls = () => {
+  count = getRandomInt(10,10);
+  for(let i = 0; i<count; i++){
+      radius = getRandomInt(10,50); 
+      speedX = (getRandomInt(-25,25)/(radius/5));
+      speedY = (getRandomInt(-25,25)/(radius/5));
+      x = getRandomInt(radius,window.innerWidth-radius);
+      y = getRandomInt(radius,window.innerHeight-radius);
+      color = getRandomColor();
+      drawBall(x,y,radius,color);
+      balls.push([x,y,radius,color,speedX,speedY]);  
+  }  
+}
+createBalls();
 
-const circles = [];
-
-const ballz = () => {
-
-    const {ball:{radius, startCoordinates}} = config;
-
-    const ballRadius = getRandomInt(radius.min,radius.max);
-    ctx.beginPath();
-    ctx.arc(startCoordinates.x,startCoordinates.y,ballRadius,Math.PI*2,0,true);
-    ctx.fillStyle = getRandomColor();
-    ctx.fill();
-    ctx.closePath();
-    
-    config.ball.startCoordinates.x +=20;
-    
+const update = () => {
+     for(let i = 0; i<count; i++){
+        drawBall(balls[i][0],balls[i][1],balls[i][2],balls[i][3]);
+        balls[i][0] += balls[i][4]
+        balls[i][1] += balls[i][5]
+        if(balls[i][0]>window.innerWidth-(balls[i][2])||balls[i][0]<0+(balls[i][2])){
+          balls[i][4]*=-1
+        }
+        if(balls[i][1]>window.innerHeight-(balls[i][2])||balls[i][1]<0+(balls[i][2])){
+            balls[i][5]*=-1
+         }      
+    }
 }
 
-for(let i = 1; i<=count; i++){
-    ballz();
-    
+const render = () => {
+    context.clearRect(0,0,window.innerWidth,window.innerHeight);
+    update();
+    requestAnimationFrame(render);
 }
-console.log("Number of circles = "+count);
 
-
-//render, tablica do przechowywania obiektow, losowo generowane obiekty z losowa predkoscia itd, odbijanie od scian, strzałki na przycisk tak zeby na telefonie dzialalo, web app
+requestAnimationFrame(render);
