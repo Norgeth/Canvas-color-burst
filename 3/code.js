@@ -9,11 +9,11 @@ let count, x, y, radius, color, speedX, speedY;
 
 //chatgpt
 const getRandomInt = (min,max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 const getRandomColor = () => {
-    //CHAT GPT
-    const letters = '0123456789ABCDEF';
+//CHAT GPT
+  const letters = '0123456789ABCDEF';
   let color = '#';
 
   do {
@@ -34,17 +34,17 @@ const drawBall = (x,y,radius,color) => {
 }
 
 const createBalls = () => {
-  count = getRandomInt(10,10);
-  for(let i = 0; i<count; i++){
-      radius = getRandomInt(10,50); 
-      speedX = (getRandomInt(-25,25)/(radius/5));
-      speedY = (getRandomInt(-25,25)/(radius/5));
-      x = getRandomInt(radius,window.innerWidth-radius);
-      y = getRandomInt(radius,window.innerHeight-radius);
-      color = getRandomColor();
-      drawBall(x,y,radius,color);
-      balls.push([x,y,radius,color,speedX,speedY]);  
-  }  
+    count = getRandomInt(10,100);
+    for(let i = 0; i<count; i++){
+        radius = getRandomInt(10,50); 
+        speedX = (getRandomInt(-25,25)/(radius/5));
+        speedY = (getRandomInt(-25,25)/(radius/5));
+        x = getRandomInt(radius,window.innerWidth-radius);
+        y = getRandomInt(radius,window.innerHeight-radius);
+        color = getRandomColor();
+        drawBall(x,y,radius,color);
+        balls.push([x,y,radius,color,speedX,speedY]);  
+    }  
 }
 createBalls();
 
