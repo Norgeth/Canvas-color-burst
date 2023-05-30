@@ -43,21 +43,21 @@ const createBalls = () => {
         y = getRandomInt(radius,window.innerHeight-radius);
         color = getRandomColor();
         drawBall(x,y,radius,color);
-        balls.push([x,y,radius,color,speedX,speedY]);  
+        balls.push({x,y,radius,color,speedX,speedY});  
     }  
 }
 createBalls();
 
 const update = () => {
      for(let i = 0; i<count; i++){
-        drawBall(balls[i][0],balls[i][1],balls[i][2],balls[i][3]);
-        balls[i][0] += balls[i][4]
-        balls[i][1] += balls[i][5]
-        if(balls[i][0]>window.innerWidth-(balls[i][2])||balls[i][0]<0+(balls[i][2])){
-          balls[i][4]*=-1
+        drawBall(balls[i].x,balls[i].y,balls[i].radius,balls[i].color);
+        balls[i].x += balls[i].speedX
+        balls[i].y += balls[i].speedY
+        if(balls[i].x>window.innerWidth-(balls[i].radius)||balls[i].x<0+(balls[i].radius)){
+          balls[i].speedX*=-1
         }
-        if(balls[i][1]>window.innerHeight-(balls[i][2])||balls[i][1]<0+(balls[i][2])){
-            balls[i][5]*=-1
+        if(balls[i].y>window.innerHeight-(balls[i].radius)||balls[i].y<0+(balls[i].radius)){
+            balls[i].speedY*=-1
          }      
     }
 }
