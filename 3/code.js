@@ -5,6 +5,9 @@ context.canvas.height = window.innerHeight;
 const balls = [];
 let isStrokeActive = false;
 let startTime = performance.now();
+let isTextVisible = true;
+let x1 = 0;
+let isHKeyPressed = false;
 
 const getRandomInt = (min,max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -16,9 +19,20 @@ const getRandomInt = (min,max) => Math.floor(Math.random() * (max - min + 1)) + 
     return color;
   };
 
-const addStroke = (e) => {
+const keyDown = (e) => {
   if(e.code == "Space"){
     isStrokeActive = !isStrokeActive;
+  }
+  if(e.code === "KeyX"&&!isHKeyPressed){
+    console.log("X down");
+    isHKeyPressed = true;
+  }
+}
+
+const keyUp = (e) => {
+  if(e.code == "KeyX"){
+    console.log("X up");
+    isHKeyPressed = false;
   }
 }
 
@@ -35,7 +49,13 @@ const drawBall = (x,y,radius,color) => {
     
 }
 
+//subject to change
+//subject to change
+//subject to change
 const drawText = () => {
+    //text1
+    if(isTextVisible){
+
     context.beginPath();
     context.fillStyle = ""
     context.strokeStyle = "black";
@@ -44,11 +64,57 @@ const drawText = () => {
     context.lineWidth = 4;
     const text = "Use spacebar to add border";
     const x = window.innerWidth/2;
-    const y = window.innerHeight-80;
+    const y = window.innerHeight-100;
     context.fillText(text,x,y);
     context.strokeText(text,x,y);
     context.closePath();
+
+  }
+    //text2 and progress bar
+    if(isTextVisible){
+
+    const x = window.innerWidth/2;
+    context.beginPath();
+    context.fillStyle = "white";
+    context.strokeStyle = "black";
+    context.font = "50px arial";
+    context.textAlign = "right";
+    context.lineWidth = 2;
+    context.fillText("Hold x to hide this message",x,window.innerHeight-20);
+    context.strokeText("Hold x to hide this message",x,window.innerHeight-20);
+    context.fillStyle = "white"
+    context.rect((window.innerWidth/2)+50,window.innerHeight-50,570,30);
+    context.stroke();
+    context.fill();
+
+    if(isHKeyPressed){
+      context.beginPath();
+      context.fillStyle = "green";
+      x1+=5
+      context.rect((window.innerWidth/2)+50,window.innerHeight-50,x1,30);
+      context.fill();
+      context.closePath();
+    }
+
+    if(!isHKeyPressed&&x1>0){
+      context.beginPath();
+      context.fillStyle = "red";
+      x1-=2.5
+      context.rect((window.innerWidth/2)+50,window.innerHeight-50,x1,30);
+      context.fill();
+      context.closePath();
+    }
+
+    if(x1>=570){
+      isTextVisible=false;
+    }
+   
+    context.closePath();
+  }
 }
+//subject to change
+//subject to change
+//subject to change
 
 const createBalls = () => {
     count = getRandomInt(100,100);
@@ -94,4 +160,5 @@ const render = (currentTime) => {
 }
 
 requestAnimationFrame(render);
-window.addEventListener("keydown", addStroke);
+window.addEventListener("keydown", keyDown);
+window.addEventListener("keyup", keyUp);
