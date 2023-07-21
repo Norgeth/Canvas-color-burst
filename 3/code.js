@@ -20,6 +20,9 @@ let countDownBlocker = false;
 let alpha = 0;
 let textFade = true;
 let textAlpha = 1;
+let offsetX = 100;
+let offsetY = 100;
+let buttonFillStyle = "white";
 
 //Function to get a random integer within a range
 const getRandomInt = (min, max) =>
@@ -55,6 +58,23 @@ const countDownCheck = () => {
 		cancelAnimationFrame(countDownCheck);
 	} else {
 		requestAnimationFrame(countDownCheck);
+	}
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Function to track mouse position
+const getMousePosition = (event) => {
+	let x = event.clientX;
+	let y = event.clientY;
+	console.log("Mouse X = " + x + ", Mouse Y = " + y);
+	if (
+		x >= window.innerWidth / 2 - offsetX / 2 &&
+		x < window.innerWidth / 2 - offsetX / 2 + offsetX &&
+		y >= window.innerHeight / 10 - offsetY / 2 &&
+		y <= window.innerHeight / 10 - offsetY / 2 + offsetY
+	) {
+		// alert("inside");
+		buttonFillStyle = getRandomColor();
 	}
 };
 
@@ -147,6 +167,22 @@ const drawText = () => {
 	}
 };
 
+//Function to draw buttons
+const drawButtons = () => {
+	context.beginPath();
+	context.rect(
+		window.innerWidth / 2 - offsetX / 2,
+		window.innerHeight / 10 - offsetY / 2,
+		offsetX,
+		offsetY
+	);
+	context.globalAlpha = 1;
+	context.fillStyle = buttonFillStyle;
+	context.fill();
+	context.closePath();
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Function to create balls and set their initial properties
 const createBalls = () => {
 	count = getRandomInt(50, 100);
@@ -163,13 +199,14 @@ const createBalls = () => {
 
 createBalls();
 
-//Function to draw the balls and text
+//Function to render the balls, buttons and text
 const draw = () => {
 	context.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	balls.forEach((ball) => {
 		drawBall(ball.x, ball.y, ball.radius, ball.color);
 	});
 	drawText();
+	drawButtons();
 };
 
 //Function to update ball positions and text elements
@@ -273,7 +310,8 @@ const restart = () => {
 	location.reload();
 };
 
-//Add event listeners for key events, visibility change, and window resize
+//Add event listeners for mouse tracking, key events, visibility change, and window resize
+window.addEventListener("click", getMousePosition);
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
 window.addEventListener("visibilitychange", handleVisibilityChange);
