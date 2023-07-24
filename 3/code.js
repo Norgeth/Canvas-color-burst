@@ -20,9 +20,16 @@ let countDownBlocker = false;
 let alpha = 0;
 let textFade = true;
 let textAlpha = 1;
-let offsetX = 100;
-let offsetY = 100;
-let buttonFillStyle = "white";
+let button1SizeX = 200;
+let button1SizeY = 50;
+let button1PositionX = window.innerWidth / 2 + button1SizeX / 2;
+let button1PositionY = window.innerHeight / 10 - button1SizeY / 2;
+let button1FillStyle = "white";
+let button2SizeX = 200;
+let button2SizeY = 50;
+let button2PositionX = window.innerWidth / 2 - button1SizeX * 1.5;
+let button2PositionY = window.innerHeight / 10 - button1SizeY / 2;
+let button2FillStyle = "white";
 
 //Function to get a random integer within a range
 const getRandomInt = (min, max) =>
@@ -62,22 +69,51 @@ const countDownCheck = () => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//add button handler that if clicked it will continously increase ball speed, same with "slow" button
+//add better button fading
+
 //Function to track mouse position
 const getMousePosition = (event) => {
 	let x = event.clientX;
 	let y = event.clientY;
 	console.log("Mouse X = " + x + ", Mouse Y = " + y);
-	if (
-		x >= window.innerWidth / 2 - offsetX / 2 &&
-		x < window.innerWidth / 2 - offsetX / 2 + offsetX &&
-		y >= window.innerHeight / 10 - offsetY / 2 &&
-		y <= window.innerHeight / 10 - offsetY / 2 + offsetY
-	) {
-		// alert("inside");
-		buttonFillStyle = getRandomColor();
+	if (isTextVisible) {
+		if (
+			x >= button1PositionX &&
+			x < button1PositionX + button1SizeX &&
+			y >= button1PositionY &&
+			y <= button1PositionY + button1SizeY
+		) {
+			// alert("faster");
+			button1FillStyle = `rgb(100,256,100)`;
+
+			balls.forEach((ball) => {
+				ball.speedX *= 1.3;
+				ball.speedY *= 1.3;
+			});
+		}
+		if (
+			x >= button2PositionX &&
+			x < button2PositionX + button2SizeX &&
+			y >= button2PositionY &&
+			y <= button2PositionY + button2SizeY
+		) {
+			// alert("slower");
+			button2FillStyle = "red";
+
+			balls.forEach((ball) => {
+				ball.speedX /= 1.3;
+				ball.speedY /= 1.3;
+			});
+		}
 	}
 };
-
+//Mouse up event handling
+const mouseUp = () => {
+	button1FillStyle = "white";
+	button2FillStyle = "white";
+};
 //Key down event handling
 const keyDown = (e) => {
 	if (e.code == "Space" && !isSpacebarPressed) {
@@ -121,7 +157,36 @@ const drawBall = (x, y, radius, color) => {
 	}
 	context.closePath();
 };
-
+//Function to draw buttons
+const drawButtons = () => {
+	if (isTextVisible) {
+		context.beginPath();
+		context.rect(
+			button1PositionX,
+			button1PositionY,
+			button1SizeX,
+			button1SizeY
+		);
+		context.globalAlpha = 1;
+		context.stroke();
+		context.fillStyle = button1FillStyle;
+		context.fill();
+		context.closePath();
+		// context.drawText()
+		context.beginPath();
+		context.rect(
+			button2PositionX,
+			button2PositionY,
+			button2SizeX,
+			button2SizeY
+		);
+		context.globalAlpha = 1;
+		context.stroke();
+		context.fillStyle = button2FillStyle;
+		context.fill();
+		context.closePath();
+	}
+};
 //Function to draw text
 const drawText = () => {
 	if (isTextVisible) {
@@ -138,9 +203,7 @@ const drawText = () => {
 		context.fillText(text, textX1, textY1);
 		context.strokeText(text, textX1, textY1);
 		context.closePath();
-	}
 
-	if (isTextVisible) {
 		//text 2
 		context.beginPath();
 		context.fillStyle = `hsla(0,100%,100%,${textAlpha})`;
@@ -153,8 +216,10 @@ const drawText = () => {
 		const textY2 = window.innerHeight - 20;
 		context.fillText(text2, textX2, textY2);
 		context.strokeText(text2, textX2, textY2);
+		context.closePath();
 
 		//progress bar
+		context.beginPath();
 		context.fillStyle = `hsla(0,100%,100%,${textAlpha})`;
 		const rectX = window.innerWidth / 2 + 50;
 		const rectY = window.innerHeight - 50;
@@ -164,22 +229,33 @@ const drawText = () => {
 		context.stroke();
 		context.fill();
 		context.closePath();
-	}
-};
 
-//Function to draw buttons
-const drawButtons = () => {
-	context.beginPath();
-	context.rect(
-		window.innerWidth / 2 - offsetX / 2,
-		window.innerHeight / 10 - offsetY / 2,
-		offsetX,
-		offsetY
-	);
-	context.globalAlpha = 1;
-	context.fillStyle = buttonFillStyle;
-	context.fill();
-	context.closePath();
+		//text for buttons
+		context.beginPath();
+		context.fillStyle = `hsla(0,100%,100%,${textAlpha})`;
+		context.strokeStyle = `hsla(0,0%,0%,${textAlpha})`;
+		context.font = "50px arial";
+		context.textAlign = "left";
+		context.lineWidth = 2;
+		const button1Text = "Faster";
+		const button1TextX = button1PositionX + 25;
+		const button1TextY = button1PositionY + 43;
+		context.fillText(button1Text, button1TextX, button1TextY);
+		context.strokeText(button1Text, button1TextX, button1TextY);
+		context.closePath();
+		context.beginPath();
+		context.fillStyle = `hsla(0,100%,100%,${textAlpha})`;
+		context.strokeStyle = `hsla(0,0%,0%,${textAlpha})`;
+		context.font = "50px arial";
+		context.textAlign = "left";
+		context.lineWidth = 2;
+		const button2Text = "Slower";
+		const button2TextX = button2PositionX + 22;
+		const button2TextY = button2PositionY + 43;
+		context.fillText(button2Text, button2TextX, button2TextY);
+		context.strokeText(button2Text, button2TextX, button2TextY);
+		context.closePath();
+	}
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,8 +281,8 @@ const draw = () => {
 	balls.forEach((ball) => {
 		drawBall(ball.x, ball.y, ball.radius, ball.color);
 	});
-	drawText();
 	drawButtons();
+	drawText();
 };
 
 //Function to update ball positions and text elements
@@ -311,7 +387,8 @@ const restart = () => {
 };
 
 //Add event listeners for mouse tracking, key events, visibility change, and window resize
-window.addEventListener("click", getMousePosition);
+window.addEventListener("mousedown", getMousePosition);
+window.addEventListener("mouseup", mouseUp);
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
 window.addEventListener("visibilitychange", handleVisibilityChange);
