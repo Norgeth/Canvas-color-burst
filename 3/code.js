@@ -33,6 +33,7 @@ let button2SizeX = 200;
 let button2SizeY = 50;
 let button2PositionX = window.innerWidth / 2 - button1SizeX * 1.5;
 let button2PositionY = window.innerHeight / 10 - button1SizeY / 2;
+let speedBlocker = 0;
 
 //Function to get a random integer within a range
 const getRandomInt = (min, max) =>
@@ -83,12 +84,7 @@ const mouseDown = (event) => {
 			y >= button1PositionY &&
 			y <= button1PositionY + button1SizeY
 		) {
-			button1FillStyle = `rgb(100,256,100)`;
 			button1Pressed = true;
-			balls.forEach((ball) => {
-				ball.speedX *= 1.3;
-				ball.speedY *= 1.3;
-			});
 		}
 		if (
 			x >= button2PositionX &&
@@ -96,20 +92,14 @@ const mouseDown = (event) => {
 			y >= button2PositionY &&
 			y <= button2PositionY + button2SizeY
 		) {
-			button2FillStyle = "red";
 			button2Pressed = true;
-			balls.forEach((ball) => {
-				ball.speedX /= 1.3;
-				ball.speedY /= 1.3;
-			});
 		}
 	}
 };
 //Mouse up event handling
 const mouseUp = () => {
 	isMouseDown = !isMouseDown;
-	button1FillStyle = "white";
-	button2FillStyle = "white";
+
 	button1Pressed = false;
 	button2Pressed = false;
 };
@@ -396,15 +386,25 @@ const update = (deltaTime) => {
 		button1Lightness += 1;
 	}
 	if (button1Pressed) {
+		if (speedBlocker <= 2000) {
+			speedBlocker += 40;
+		}
 		balls.forEach((ball) => {
-			ball.speedX *= 1.05;
-			ball.speedY *= 1.05;
+			if (speedBlocker < 2000) {
+				ball.speedX *= 1.05;
+				ball.speedY *= 1.05;
+			}
 		});
 	}
 	if (button2Pressed) {
+		if (speedBlocker >= -2000) {
+			speedBlocker -= 40;
+		}
 		balls.forEach((ball) => {
-			ball.speedX /= 1.1;
-			ball.speedY /= 1.1;
+			if (speedBlocker > -2000) {
+				ball.speedX /= 1.05;
+				ball.speedY /= 1.05;
+			}
 		});
 	}
 };
