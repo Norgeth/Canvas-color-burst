@@ -14,6 +14,7 @@ let isXKeyPressed = false;
 let speed = 500;
 let stopProgressBar = false;
 let isSpacebarPressed = false;
+let isMouseDown = false;
 let afterThreeSeconds = false;
 let targetTime = 0;
 let countDownBlocker = false;
@@ -22,14 +23,16 @@ let textFade = true;
 let textAlpha = 1;
 let button1SizeX = 200;
 let button1SizeY = 50;
+let button1Pressed = false;
+let button2Pressed = false;
+let button2Lightness = 100;
+let button1Lightness = 100;
 let button1PositionX = window.innerWidth / 2 + button1SizeX / 2;
 let button1PositionY = window.innerHeight / 10 - button1SizeY / 2;
-let button1FillStyle = "white";
 let button2SizeX = 200;
 let button2SizeY = 50;
 let button2PositionX = window.innerWidth / 2 - button1SizeX * 1.5;
 let button2PositionY = window.innerHeight / 10 - button1SizeY / 2;
-let button2FillStyle = "white";
 
 //Function to get a random integer within a range
 const getRandomInt = (min, max) =>
@@ -68,16 +71,11 @@ const countDownCheck = () => {
 	}
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//add button handler that if clicked it will continously increase ball speed, same with "slow" button
-//add better button fading
-
-//Function to track mouse position
-const getMousePosition = (event) => {
+//Function to track mouse position and to check if a button is pressed
+const mouseDown = (event) => {
 	let x = event.clientX;
 	let y = event.clientY;
-	console.log("Mouse X = " + x + ", Mouse Y = " + y);
+	isMouseDown = !isMouseDown;
 	if (isTextVisible) {
 		if (
 			x >= button1PositionX &&
@@ -85,9 +83,8 @@ const getMousePosition = (event) => {
 			y >= button1PositionY &&
 			y <= button1PositionY + button1SizeY
 		) {
-			// alert("faster");
 			button1FillStyle = `rgb(100,256,100)`;
-
+			button1Pressed = true;
 			balls.forEach((ball) => {
 				ball.speedX *= 1.3;
 				ball.speedY *= 1.3;
@@ -99,9 +96,8 @@ const getMousePosition = (event) => {
 			y >= button2PositionY &&
 			y <= button2PositionY + button2SizeY
 		) {
-			// alert("slower");
 			button2FillStyle = "red";
-
+			button2Pressed = true;
 			balls.forEach((ball) => {
 				ball.speedX /= 1.3;
 				ball.speedY /= 1.3;
@@ -111,8 +107,11 @@ const getMousePosition = (event) => {
 };
 //Mouse up event handling
 const mouseUp = () => {
+	isMouseDown = !isMouseDown;
 	button1FillStyle = "white";
 	button2FillStyle = "white";
+	button1Pressed = false;
+	button2Pressed = false;
 };
 //Key down event handling
 const keyDown = (e) => {
@@ -157,36 +156,7 @@ const drawBall = (x, y, radius, color) => {
 	}
 	context.closePath();
 };
-//Function to draw buttons
-const drawButtons = () => {
-	if (isTextVisible) {
-		context.beginPath();
-		context.rect(
-			button1PositionX,
-			button1PositionY,
-			button1SizeX,
-			button1SizeY
-		);
-		context.globalAlpha = 1;
-		context.stroke();
-		context.fillStyle = button1FillStyle;
-		context.fill();
-		context.closePath();
-		// context.drawText()
-		context.beginPath();
-		context.rect(
-			button2PositionX,
-			button2PositionY,
-			button2SizeX,
-			button2SizeY
-		);
-		context.globalAlpha = 1;
-		context.stroke();
-		context.fillStyle = button2FillStyle;
-		context.fill();
-		context.closePath();
-	}
-};
+
 //Function to draw text
 const drawText = () => {
 	if (isTextVisible) {
@@ -194,7 +164,7 @@ const drawText = () => {
 		context.beginPath();
 		context.fillStyle = `hsla(${randomHue},${randomSat}%,${randomLightness}%,${textAlpha})`;
 		context.strokeStyle = `hsla(0,0%,0%,${textAlpha})`;
-		context.font = "100px arial";
+		context.font = "110px arial";
 		context.textAlign = "center";
 		context.lineWidth = 4;
 		const text = "Use spacebar to add border";
@@ -208,14 +178,28 @@ const drawText = () => {
 		context.beginPath();
 		context.fillStyle = `hsla(0,100%,100%,${textAlpha})`;
 		context.strokeStyle = `hsla(0,0%,0%,${textAlpha})`;
-		context.font = "50px arial";
+		context.font = "48px arial";
 		context.textAlign = "right";
 		context.lineWidth = 2;
-		const text2 = "Hold x to hide this message";
+		const text2 = `Hold "x" key to hide interface`;
 		const textX2 = window.innerWidth / 2;
 		const textY2 = window.innerHeight - 20;
 		context.fillText(text2, textX2, textY2);
 		context.strokeText(text2, textX2, textY2);
+		context.closePath();
+
+		//text 3
+		context.beginPath();
+		context.fillStyle = `hsla(0,100%,100%,${textAlpha})`;
+		context.strokeStyle = `hsla(0,0%,0%,${textAlpha})`;
+		context.font = "48px arial";
+		context.textAlign = "center";
+		context.lineWidth = 2;
+		const text3 = `Use buttons to change balls speed`;
+		const textX3 = window.innerWidth / 2;
+		const textY3 = 48;
+		context.fillText(text3, textX3, textY3);
+		context.strokeText(text3, textX3, textY3);
 		context.closePath();
 
 		//progress bar
@@ -227,6 +211,43 @@ const drawText = () => {
 		const rectWidth = 30;
 		context.rect(rectX, rectY, rectLength, rectWidth);
 		context.stroke();
+		context.fill();
+		context.closePath();
+
+		//buttons
+		context.beginPath();
+		context.rect(
+			button1PositionX,
+			button1PositionY,
+			button1SizeX,
+			button1SizeY
+		);
+
+		context.stroke();
+		if (!button1Pressed) {
+			context.fillStyle = `hsla(120,80%,${button1Lightness}%,${textAlpha})`;
+		} else if (button1Pressed) {
+			button1Lightness = 50;
+			context.fillStyle = `hsla(120,80%,${button1Lightness}%,${textAlpha})`;
+		}
+
+		context.fill();
+		context.closePath();
+		context.beginPath();
+		context.rect(
+			button2PositionX,
+			button2PositionY,
+			button2SizeX,
+			button2SizeY
+		);
+
+		context.stroke();
+		if (!button2Pressed) {
+			context.fillStyle = `hsla(360,100%,${button2Lightness}%,${textAlpha})`;
+		} else if (button2Pressed) {
+			button2Lightness = 50;
+			context.fillStyle = `hsla(360,100%,${button2Lightness}%,${textAlpha})`;
+		}
 		context.fill();
 		context.closePath();
 
@@ -258,7 +279,6 @@ const drawText = () => {
 	}
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Function to create balls and set their initial properties
 const createBalls = () => {
 	count = getRandomInt(50, 100);
@@ -281,7 +301,7 @@ const draw = () => {
 	balls.forEach((ball) => {
 		drawBall(ball.x, ball.y, ball.radius, ball.color);
 	});
-	drawButtons();
+
 	drawText();
 };
 
@@ -368,6 +388,25 @@ const update = (deltaTime) => {
 			}
 		}
 	}
+	//Buttons update
+	if (!isMouseDown && !button2Pressed) {
+		button2Lightness += 1;
+	}
+	if (!isMouseDown && !button1Pressed) {
+		button1Lightness += 1;
+	}
+	if (button1Pressed) {
+		balls.forEach((ball) => {
+			ball.speedX *= 1.05;
+			ball.speedY *= 1.05;
+		});
+	}
+	if (button2Pressed) {
+		balls.forEach((ball) => {
+			ball.speedX /= 1.1;
+			ball.speedY /= 1.1;
+		});
+	}
 };
 
 //Render function to initiate animation loop
@@ -387,7 +426,7 @@ const restart = () => {
 };
 
 //Add event listeners for mouse tracking, key events, visibility change, and window resize
-window.addEventListener("mousedown", getMousePosition);
+window.addEventListener("mousedown", mouseDown);
 window.addEventListener("mouseup", mouseUp);
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
