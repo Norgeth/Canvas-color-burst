@@ -379,10 +379,10 @@ const update = (deltaTime) => {
 		}
 	}
 	//Buttons update
-	if (!isMouseDown && !button2Pressed) {
+	if (!button2Pressed && button2Lightness < 100) {
 		button2Lightness += 1;
 	}
-	if (!isMouseDown && !button1Pressed) {
+	if (!button1Pressed && button1Lightness < 100) {
 		button1Lightness += 1;
 	}
 	if (button1Pressed) {
