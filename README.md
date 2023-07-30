@@ -2,6 +2,9 @@
  
 Welcome to "Canvas Color Burst," an enchanting web application that offers an immersive experience filled with dynamic, moving balls in an explosion of vibrant colors.
 
+![image](https://github.com/Norgeth/Canvas-color-burst/assets/111367440/833e77f4-6b15-4409-a41a-767482b3ff31)
+
+
 ![image](https://github.com/Norgeth/Canvas-color-burst/assets/111367440/dfcb844d-abd8-4a66-a68d-cc618170b575)
 
 
