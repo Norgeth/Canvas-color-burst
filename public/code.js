@@ -185,7 +185,7 @@ const drawText = () => {
 		context.font = "48px arial";
 		context.textAlign = "center";
 		context.lineWidth = 2;
-		const text3 = `Use buttons to change balls speed`;
+		const text3 = `Hold buttons to change balls speed`;
 		const textX3 = window.innerWidth / 2;
 		const textY3 = 48;
 		context.fillText(text3, textX3, textY3);
