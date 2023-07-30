@@ -2,6 +2,9 @@
  
 Welcome to "Canvas Color Burst," an enchanting web application that offers an immersive experience filled with dynamic, moving balls in an explosion of vibrant colors.
 
+![image](https://github.com/Norgeth/Canvas-color-burst/assets/111367440/dfcb844d-abd8-4a66-a68d-cc618170b575)
+
+
 # How to Experience the Color Burst:
 Observe the Dynamic Animation: Sit back and watch as countless colorful balls elegantly glide and interact across the canvas, creating a mesmerizing display that will captivate your senses.
 
