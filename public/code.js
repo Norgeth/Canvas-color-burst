@@ -378,7 +378,7 @@ const update = (deltaTime) => {
 			}
 		}
 	}
-	//Buttons update
+	//Buttons fading update
 	if (!button2Pressed && button2Lightness < 100) {
 		button2Lightness += 1;
 	}
